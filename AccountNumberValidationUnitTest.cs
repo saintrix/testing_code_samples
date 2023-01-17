@@ -29,13 +29,13 @@ namespace MMoney.Test.UnitTests.MobileMoney.Lipisha
 			//turn validation on for kenya
 			if (_readDb.DistrictSettings.Any(rs => rs.SettingName == "RepaymentValidationSetting" && rs.CountryId == countryId))
 			{
-				Database.Models.Roster.DistrictSetting repaymentValidationStatusSetting = _writeDb.DistrictSettings.SingleOrDefault(
+				Database.Models.CRM.DistrictSetting repaymentValidationStatusSetting = _writeDb.DistrictSettings.SingleOrDefault(
 						rs => rs.SettingName == "RepaymentValidationSetting" && rs.CountryId == countryId);
 				repaymentValidationStatusSetting.SettingText = "Validate";
 			}
 			else
 			{
-				Database.Models.Roster.DistrictSetting repaymentValidationStatusSetting = new Database.Models.Roster.DistrictSetting();
+				Database.Models.CRM.DistrictSetting repaymentValidationStatusSetting = new Database.Models.CRM.DistrictSetting();
 				repaymentValidationStatusSetting.RegionalSettingId = _writeDb.DistrictSettings.Min(ds => ds.RegionalSettingId) > 0 ? -1 : _writeDb.DistrictSettings.Min(ds => ds.RegionalSettingId) - 1;
 				repaymentValidationStatusSetting.SettingName = "RepaymentValidationSetting";
 				repaymentValidationStatusSetting.SettingText = "Validate";
@@ -45,15 +45,15 @@ namespace MMoney.Test.UnitTests.MobileMoney.Lipisha
 
 			//valid input, client Id = 1221, DistrictId = 6646
 			lipishaData = new LipishaData(
-				api_key: "1bcef79815181324c0132a66e2b76e06",
-				api_signature: "797NE2UTDO+5FARXfqQzzDNwBYDT1oEVtRjLpj+NdDwcaeXcYDgk2BVkEWDUn+o8H3ViDfL/i0Tr04BN+UhX5CMqYTFCTCNY8iK3jsu8Q9Irr4IGL6lGFIVcOFOAlMNznSvovQ+oYBadZ34g9NMFqyE5qOkLt/CNZpZzABSmjdk=",
+				api_key: "132a66e2b76e06",
+				api_signature: "NdDwcaeXcYDgk2BVkEWDUn+o8H3ViDfL/i0Tr04BN+UhX5CMqYTFCTCNY8iK3jsu8Q9Irr4IGL6lGFIVcOFOAlMNznSvovQ+oYBadZ34g9NMFqyE5qOkLt/CNZpZzABSmjdk=",
 				api_type: "Initiate",
 				transaction_reference: "234234",
 				transaction_status: "Completed",
 				transaction_status_code: "CU79AW109D",
 				transaction_status_description: null,
 				transaction_account: "13559830",
-				transaction_mobile: "254710821667",
+				transaction_mobile: "2**710821667",
 				transaction_status_action: null,
 				transaction_status_reason: null,
 				transaction_country: "KE",
@@ -64,7 +64,7 @@ namespace MMoney.Test.UnitTests.MobileMoney.Lipisha
 				transaction_currency: "KES",
 				transaction_date: DateTime.Now.ToShortTimeString(),
 				transaction_merchant_reference: "1",
-				transaction_code: "CU79AW109D"
+				transaction_code: "CU7W109D"
 			   );
 
 			testData = new GenericPayment(lipishaData);
@@ -75,7 +75,7 @@ namespace MMoney.Test.UnitTests.MobileMoney.Lipisha
         [TestMethod]
         public void Lipisha_BlankAccountNumberTest() //1 - payment should be rejected
         {
-            lipishaData.transaction_code = "CU7J8W109Q";
+            lipishaData.transaction_code = "CU7J109Q";
             lipishaData.transaction_reference = "234234";
             lipishaData.transaction_account = "";
 
@@ -90,7 +90,7 @@ namespace MMoney.Test.UnitTests.MobileMoney.Lipisha
         [TestMethod]
         public void Lipisha_SpacesAndSpecialCharactersOnlyInAccountNumberTest() //1a - payment should be rejected
         {
-            lipishaData.transaction_code = "CU79AW1FES";
+            lipishaData.transaction_code = "CUAW1FES";
             lipishaData.transaction_account = "~`!@#$%^&*()_-+=}]{[|:;'?/>.<,";
             //NB cannot exahust all characters without regex, the full range extends to the ASCI/Unicode character set
 
@@ -106,7 +106,7 @@ namespace MMoney.Test.UnitTests.MobileMoney.Lipisha
 		public void Lipisha_SingleCharacterAccountNumberTestWithValidPhoneNumber() //2 
         {
             lipishaData.transaction_code = "CU79GAD09Q";
-            lipishaData.transaction_mobile = "254786614795";
+            lipishaData.transaction_mobile = "2**786614795";
             lipishaData.transaction_account = "j";
 
             testData = new GenericPayment(lipishaData);
@@ -119,8 +119,8 @@ namespace MMoney.Test.UnitTests.MobileMoney.Lipisha
         [TestMethod]
         public void Lipisha_SingleCharacterAccountNumberTestWithInvalidPhoneNumber() //2 - phone number validation to be done
         {
-            lipishaData.transaction_code = "CU79AW16OG2";
-            lipishaData.transaction_mobile = "254711000000";
+            lipishaData.transaction_code = "CU7W16OG2";
+            lipishaData.transaction_mobile = "2**711000000";
             lipishaData.transaction_account = "j";
 
             testData = new GenericPayment(lipishaData);
@@ -134,8 +134,8 @@ namespace MMoney.Test.UnitTests.MobileMoney.Lipisha
         [TestMethod]
         public void Lipisha_AlphanumericAccountNumberTestValidPhoneNumber()//2a Phone Number Validation to be done
         {
-            lipishaData.transaction_code = "CU7924FA4G";
-            lipishaData.transaction_mobile = "254710821667";
+            lipishaData.transaction_code = "CU924FA4G";
+            lipishaData.transaction_mobile = "2**710821667";
             lipishaData.transaction_account = "1a";
 
             testData = new GenericPayment(lipishaData);
@@ -149,9 +149,9 @@ namespace MMoney.Test.UnitTests.MobileMoney.Lipisha
         [TestMethod]
         public void Lipisha_AlphanumericAccountNumberTestInvalidPhoneNumber()//2a Phone Number validation to be done
         {
-            lipishaData.transaction_code = "CUMK394QW109Q";
+            lipishaData.transaction_code = "CUM94QW109Q";
             lipishaData.transaction_account = "1a";
-            lipishaData.transaction_mobile = "254711000000";
+            lipishaData.transaction_mobile = "2**711000000";
 
             testData = new GenericPayment(lipishaData);
 
@@ -166,7 +166,7 @@ namespace MMoney.Test.UnitTests.MobileMoney.Lipisha
         {
             lipishaData.transaction_code = "CU797MN98GJA49FA";
             lipishaData.transaction_account = "11111111"; //invalid account number
-            lipishaData.transaction_mobile = "254710821667";
+            lipishaData.transaction_mobile = "2**710821667";
 
             testData = new GenericPayment(lipishaData);
 
@@ -182,7 +182,7 @@ namespace MMoney.Test.UnitTests.MobileMoney.Lipisha
         {
             lipishaData.transaction_code = "CU79A2ZC4BA46GA";
             lipishaData.transaction_account = "135";
-            lipishaData.transaction_mobile = "254710821667";
+            lipishaData.transaction_mobile = "2**710821667";
 
             testData = new GenericPayment(lipishaData);
 
@@ -197,7 +197,7 @@ namespace MMoney.Test.UnitTests.MobileMoney.Lipisha
         {
             lipishaData.transaction_code = "CU79IMMoneyAKI443JGJ";
             lipishaData.transaction_account = "1,3,5,&5!9:8?3&0*";
-            lipishaData.transaction_mobile = "254710821667";
+            lipishaData.transaction_mobile = "2**710821667";
 
             testData = new GenericPayment(lipishaData);
 
@@ -213,7 +213,7 @@ namespace MMoney.Test.UnitTests.MobileMoney.Lipisha
         {
             lipishaData.transaction_code = "CVU7345GA43FDA6";
             lipishaData.transaction_account = "1,1<1{1:1)1*1@1^!";
-            lipishaData.transaction_mobile = "254710821667";
+            lipishaData.transaction_mobile = "2**710821667";
 
             testData = new GenericPayment(lipishaData);
 
@@ -227,7 +227,7 @@ namespace MMoney.Test.UnitTests.MobileMoney.Lipisha
         {
             lipishaData.transaction_code = "CU73484KFA3FAA6";
             lipishaData.transaction_account = "K,B,A";
-            lipishaData.transaction_mobile = "254786614795";
+            lipishaData.transaction_mobile = "2**786614795";
 
             testData = new GenericPayment(lipishaData);
 
@@ -242,7 +242,7 @@ namespace MMoney.Test.UnitTests.MobileMoney.Lipisha
         {
             lipishaData.transaction_code = "CUN3874KFA3FA6";
             lipishaData.transaction_account = "K,B,A";
-            lipishaData.transaction_mobile = "25470111111";
+            lipishaData.transaction_mobile = "2**70111111";
 
             testData = new GenericPayment(lipishaData);
 

@@ -12,9 +12,9 @@ using System.Windows.Forms;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MMoney.Database.DbContexts;
 using MMoney.Database.Factories;
-using MMoney.Database.Models.Roster;
-using MMoney.Database.Models.Roster.Clients;
-using MMoney.Database.Models.Roster.Sms;
+using MMoney.Database.Models.CRM;
+using MMoney.Database.Models.CRM.Clients;
+using MMoney.Database.Models.CRM.Sms;
 using MMoney.Website.SMS;
 using MMoney.Website.SMS.Infobip;
 
@@ -23,13 +23,13 @@ namespace MMoney.Test.UnitTests.SmsUnitTests
     [TestClass]
     public class SmsTests
     {
-        private RosterContext _db;
+        private CRMContext _db;
         private MessagingService _messageService;
         private InfobipService _infobipService;
 
         public SmsTests()
         {
-            _db = DbContextFactory.GetRosterDbContext(DbInstanceType.Live, RosterInstance.Kenya);
+            _db = DbContextFactory.GetCRMDbContext(DbInstanceType.Live, CRMInstance.Kenya);
             _messageService = new MessagingService(_db, _db);
             _infobipService = new InfobipService();
         }
